@@ -1,17 +1,47 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styles from '../styles/NavBar.module.css';
+import React from "react";
+import { navbar, Container, Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
+import styles from "../styles/NavBar.module.css";
+import logo from "../assets/logo.png";
 
 function NavBar() {
   return (
-    <nav className={styles.navbar}>
-      <h2 className={styles.logo}>YOYOK</h2>
-      <ul className={styles.navLinks}>
-        <li><Link to="/" className={styles.navLink}>Home</Link></li>
-        <li><Link to="/signin" className={styles.navLink}>Sign In</Link></li>
-        <li><Link to="/signup" className={styles.navLink}>Sign Up</Link></li>
-      </ul>
-    </nav>
+    <navbar className={styles.NavBar} expand="md" fixed="top">
+      <Container>
+        <NavLink to="/">
+          <navbar.Brand>
+            <img src={logo} alt="logo" height="45"></img>
+          </navbar.Brand>
+        </NavLink>
+        <navbar.Toggle aria-controls="basic-navbar-nav" />
+        <navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ml-auto text-left">
+            <NavLink
+              exact
+              className={styles.NavLink}
+              activeClassName={styles.Active}
+              to="/"
+            >
+              <i className="fas fa-home"></i>Home
+            </NavLink>
+            <NavLink
+              className={styles.NavLink}
+              activeClassName={styles.Active}
+              to="/signin"
+            >
+              <i className="fas fa-sign-in-alt"></i>sign in
+            </NavLink>
+            <NavLink
+              className={styles.NavLink}
+              activeClassName={styles.Active}
+              to="/signup"
+            >
+              <i className="fas fa-user-plus"></i>sign up
+            </NavLink>
+          </Nav>
+        </navbar.Collapse>
+      </Container>
+    </navbar>
   );
 }
 
