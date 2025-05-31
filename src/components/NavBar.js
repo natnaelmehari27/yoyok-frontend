@@ -1,20 +1,21 @@
 import React from "react";
-import { navbar, Container, Nav } from "react-bootstrap";
+import { Navbar, Container, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import styles from "../styles/NavBar.module.css";
 import logo from "../assets/logo.png";
 
 function NavBar() {
+    // This component renders the navigation bar with links to Home, Sign In, and Sign Up pages.
   return (
-    <navbar className={styles.NavBar} expand="md" fixed="top">
+    <Navbar className={styles.NavBar} expand="md" fixed="top">
       <Container>
         <NavLink to="/">
-          <navbar.Brand>
+          <Navbar.Brand>
             <img src={logo} alt="logo" height="45"></img>
-          </navbar.Brand>
+          </Navbar.Brand>
         </NavLink>
-        <navbar.Toggle aria-controls="basic-navbar-nav" />
-        <navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto text-left">
             <NavLink
               exact
@@ -39,9 +40,9 @@ function NavBar() {
               <i className="fas fa-user-plus"></i>sign up
             </NavLink>
           </Nav>
-        </navbar.Collapse>
+        </Navbar.Collapse>
       </Container>
-    </navbar>
+    </Navbar>
   );
 }
 
