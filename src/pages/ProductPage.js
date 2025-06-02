@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import ProductForm from "../components/ProductForm";
 
 function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -18,9 +19,16 @@ function ProductPage() {
     ? products.filter(p => p.category.name === selectedCategory)
     : products;
 
+    const reloadProducts = () => {
+       axios.get('http://127.0.0.1:8000/api/products/')
+            .then(res => setProducts(res.data)); 
+    }
+
     return (
     <div>
       <h2>Products</h2>
+
+      <ProductForm onSuccess={reloadProducts} />
 
       <select onChange={(e) => setSelectedCategory(e.target.value)} value={selectedCategory}>
         <option value="">All Categories</option>
