@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductForm from "../components/ProductForm";
+import { Link } from "react-router-dom";
 
 function ProductPage() {
   const [products, setProducts] = useState([]);
@@ -40,7 +41,9 @@ function ProductPage() {
       <div>
         {filteredProducts.map(product => (
           <div key={product.id}>
-            <h4>{product.name}</h4>
+            <h4>
+                <Link to={`/products/${product.id}`}>{product.name}</Link>
+            </h4>
             <p>{product.description}</p>
             <p><strong>Category:</strong> {product.category.name}</p>
             <p><strong>Price:</strong> ${product.price}</p>
