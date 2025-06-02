@@ -3,6 +3,8 @@ import axios from 'axios';
 import ProductForm from "../components/ProductForm";
 import { Link } from "react-router-dom";
 
+import ProductList from '../components/ProductsList';
+
 function ProductPage() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -28,6 +30,8 @@ function ProductPage() {
     return (
     <div>
       <h2>Products</h2>
+
+      <ProductList products={filteredProducts} />
 
       <ProductForm onSuccess={reloadProducts} />
 
