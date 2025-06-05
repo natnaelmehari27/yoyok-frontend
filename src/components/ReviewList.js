@@ -1,17 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-function ReviewList({ productId }) {
-  const [reviews, setReviews] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:8000/api/products/${productId}/reviews/`)
-      .then((res) => setReviews(res.data))
-      .catch((err) => console.error("Failed to load reviews", err));
-  }, [productId]);
-
-  if (reviews.length === 0) return <p>No reviews yet.</p>;
+function ReviewList({ reviews }) {
+  if (!reviews.length) return <p>No reviews yet.</p>;
 
   return (
     <div>

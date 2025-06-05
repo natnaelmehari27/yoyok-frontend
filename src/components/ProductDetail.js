@@ -3,13 +3,13 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import ReviewList from '../components/ReviewList';
+import ReviewForm from '../components/ReviewForm';
 
 function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
-  const [reviewText, setReviewText] = useState('');
-  const [rating, setRating] = useState(0);
+  
 
    useEffect(() => {
     axios.get(`http://127.0.0.1:8000/api/products/${id}/`)
@@ -20,20 +20,8 @@ function ProductDetail() {
       .then(res => setReviews(res.data));
   }, [id]);
 
-  const handleReviewSubmit = (e) => {
-    e.preventDefault();
-
-    axios.post('http://127.0.0.1:8000/api/reviews/', {
-      product: id,
-      text: reviewText,
-      rating: rating,
-    })
-    .then(res => {
-      setReviews([...reviews, res.data]);
-      setReviewText('');
-      setRating(0);
-    })
-    .catch(err => console.error(err));
+   const handleAddReview = (newReview) => {
+    setReviews([...reviews, newReview]);
   };
 
   if (!product) return <div>Loading...</div>;
@@ -50,10 +38,11 @@ function ProductDetail() {
            width="300"
         />
       </div>
-
+      
+      <h3>Reviews</h3>
       <ReviewList productId={product.id} />
 
-      <h3>Reviews</h3>
+      <h4>Leave a Review</h4>
       {reviews.length > 0 ? (
         reviews.map(review => (
           <div key={review.id}>
@@ -67,29 +56,7 @@ function ProductDetail() {
       )}
 
       <h4>Leave a Review</h4>
-      <form onSubmit={handleReviewSubmit}>
-        <label>
-          Rating (0–5):
-          <input
-            type="number"
-            value={rating}
-            onChange={e => setRating(parseFloat(e.target.value))}
-            min="0"
-            max="5"
-            step="0.5"
-            required
-          />
-        </label>
-        <br />
-        <textarea
-          placeholder="Your review..."
-          value={reviewText}
-          onChange={e => setReviewText(e.target.value)}
-          required
-        />
-        <br />
-        <button type="submit" disabled={!reviewText || rating <= 0}>Submit Review</button>
-      </form>
+      <ReviewForm productId={id} onReviewAdded={handleAddReview} />
     </div>
   );
 }
