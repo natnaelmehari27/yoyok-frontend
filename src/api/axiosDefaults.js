@@ -1,5 +1,8 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "https://drf-api-rec.herokuapp.com/";
-axios.defaults.headers.post["Content-Type"] = "Multipart/form-data";
-axios.defaults.withCredentials = true; 
+const axiosInstance = axios.create({
+  baseURL: process.env.REACT_APP_API_BASE_URL || 'http://127.0.0.1:8000/api',
+  withCredentials: true,
+});
+
+export default axiosInstance;
