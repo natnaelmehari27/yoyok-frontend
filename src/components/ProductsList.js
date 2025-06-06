@@ -1,35 +1,45 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
+import axiosInstance from "../api/axiosDefaults";
 
 
 function ProductList() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/products/')
-      .then(response => {
+    async function fetchProducts() {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axiosInstance.get('/products/');
         setProducts(response.data);
+      } catch (err) {
+        setError('Failed to load products.');
+        console.error(err);
+      } finally {
         setLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setLoading(false);
-      });
+      }
+    }
+    fetchProducts();
   }, []);
 
   if (loading) return <div>Loading...</div>;
 
+  if (error) return <div style={{ color: "red" }}>{error}</div>;
+
+  if (products.length === 0) return <div>No products available.</div>;
+
   return (
     <div>
-      {products.map(product => (
+      {products.map((product) => (
         <div key={product.id}>
           <h3>
             <Link to={`/products/${product.id}`}>{product.name}</Link>
           </h3>
-          <p>Category ID: {product.category}</p> {/* category is likely an ID, not an object */}
-          <p>${product.price}</p>
+          <p>Category: {product.category?.name || "Uncategorized"}</p> 
+          <p>Price: ${product.price}</p>
         </div>
       ))}
     </div>
