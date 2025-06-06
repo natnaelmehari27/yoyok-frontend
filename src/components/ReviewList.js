@@ -1,19 +1,35 @@
-import React from 'react';
+import React from "react";
 
 function ReviewList({ reviews }) {
-  if (!reviews.length) return <p>No reviews yet.</p>;
+  if (!reviews || reviews.length === 0) {
+    return <p>No reviews yet.</p>;
+  }
 
   return (
-    <div>
-      <h3>Reviews</h3>
-      {reviews.map((review) => (
-        <div key={review.id} style={{ borderBottom: "1px solid #ccc", marginBottom: "1rem" }}>
-          <p><strong>Rating:</strong> {review.rating} / 5</p>
-          <p>{review.comment}</p>
-          <p style={{ fontSize: "0.9rem", color: "gray" }}>By user {review.user}</p>
-        </div>
-      ))}
-    </div>
+    <section>
+      <div>
+        <h3>Reviews</h3>
+        {reviews.map(({ id, rating, comment, user }) => (
+          <div
+            key={id}
+            style={{
+              borderBottom: "1px solid #ccc",
+              marginBottom: "1rem",
+              paddingBottom: "1rem",
+            }}
+          >
+            <p>
+              <strong>Rating:</strong> {rating} / 5
+            </p>
+            <p>{comment}</p>
+            <p style={{ fontSize: "0.9rem", color: "gray" }}>
+              By user{" "}
+              {typeof user === "string" ? user : user?.username || "Anonymous"}
+            </p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
