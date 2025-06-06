@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "../styles/SignIn.module.css";
 import btnStyles from "../styles/Button.module.css";
@@ -27,8 +27,9 @@ const SignUp = () => {
   const { username, password1, password2 } = signUpData;
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setSignUpData({
@@ -39,11 +40,23 @@ const SignUp = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsSubmitting(true);
+    setErrors({});
     try {
       await axios.post("/dj-rest-auth/registration/", signUpData);
-      history.push("/signin");
+      navigate("/signin");
     } catch (err) {
-      setErrors(err.response?.data);
+      if (err.response?.data) {
+        setErrors(err.response.data);
+      } else {
+        setErrors({
+          non_field_errors: [
+            "An unexpected error occurred. Please try again.",
+          ],
+        });
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -51,11 +64,11 @@ const SignUp = () => {
     <Row className={styles.Row}>
       <Col className="my-auto py-2 p-md-2" md={6}>
         <Container className={`${appStyles.Content} p-4 `}>
-          <h1 className={styles.Header}>sign up</h1>
+          <h1 className={styles.Header}>Sign Up</h1>
 
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="username">
-              <Form.Label className="d-none">username</Form.Label>
+          <Form onSubmit={handleSubmit} noValidate>
+            <Form.Group controlId="username" className="mb-3">
+              <Form.Label className="d-none">Username</Form.Label>
               <Form.Control
                 className={styles.Input}
                 type="text"
@@ -63,15 +76,19 @@ const SignUp = () => {
                 name="username"
                 value={username}
                 onChange={handleChange}
+                required
+                autoComplete="username"
+                disabled={isSubmitting}
               />
-            </Form.Group>
-            {errors.username?.map((message, idx) => (
-              <Alert variant="warning" key={idx}>
+              {errors.username?.map((message, idx) => (
+              <Alert variant="warning" key={idx} className="mt-2">
                 {message}
               </Alert>
             ))}
+            </Form.Group>
+            
 
-            <Form.Group controlId="password1">
+            <Form.Group controlId="password1" className="mb-3">
               <Form.Label className="d-none">Password</Form.Label>
               <Form.Control
                 className={styles.Input}
@@ -80,15 +97,19 @@ const SignUp = () => {
                 name="password1"
                 value={password1}
                 onChange={handleChange}
+                required
+                autoComplete="new-password"
+                disabled={isSubmitting}
               />
-            </Form.Group>
-            {errors.password1?.map((message, idx) => (
-              <Alert key={idx} variant="warning">
+              {errors.password1?.map((message, idx) => (
+              <Alert key={idx} variant="warning" className="mt-2">
                 {message}
               </Alert>
             ))}
+            </Form.Group>
+            
 
-            <Form.Group controlId="password2">
+            <Form.Group controlId="password2" >
               <Form.Label className="d-none">Confirm password</Form.Label>
               <Form.Control
                 className={styles.Input}
@@ -97,19 +118,24 @@ const SignUp = () => {
                 name="password2"
                 value={password2}
                 onChange={handleChange}
+                required
+                autoComplete="new-password"
+                disabled={isSubmitting}
               />
-            </Form.Group>
-            {errors.password2?.map((message, idx) => (
-              <Alert key={idx} variant="warning">
+              {errors.password2?.map((message, idx) => (
+              <Alert key={idx} variant="warning" className="mt-2">
                 {message}
               </Alert>
             ))}
+            </Form.Group>
+            
 
             <Button
               className={`${btnStyles.Button} ${btnStyles.Wide} ${btnStyles.Bright}`}
               type="submit"
+              disabled={isSubmitting}
             >
-              Sign up
+              {isSubmitting ? "Signing up..." : "Sign Up"}
             </Button>
             {errors.non_field_errors?.map((message, idx) => (
               <Alert key={idx} variant="warning" className="mt-3">
@@ -133,6 +159,7 @@ const SignUp = () => {
           className={appStyles.FillerImage}
           src={equalSymbolImg}
           alt="Hand holding equal symbol"
+          fluid
         />
       </Col>
     </Row>
