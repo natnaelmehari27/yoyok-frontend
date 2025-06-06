@@ -1,38 +1,56 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../api/axiosDefaults';
+
 
 function ReviewForm({ productId, onReviewAdded }) {
   const [reviewText, setReviewText] = useState('');
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    axios.post('http://127.0.0.1:8000/api/reviews/', {
-      product: productId,
-      text: reviewText,
-      rating,
-    })
-    .then(res => {
-      onReviewAdded(res.data);   
+    if (!rating || rating <= 0 || rating > 5) {
+      setError('Please enter a valid rating between 1 and 5.');
+      return;
+    }
+
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const response = await axiosInstance.post('/reviews/', {
+        product: productId,
+        text: reviewText,
+        rating: parseFloat(rating),
+      });
+
+      onReviewAdded?.(response.data);
       setReviewText('');
-      setRating(0);
-    })
-    .catch(err => console.error(err));
+      setRating('');
+    } catch (err) {
+      setError('Failed to submit review.');
+      console.error(err);
+    } finally {
+      setSubmitting(false);
+    }
   };
+
 
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Rating (0–5):
+        Rating (1–5):
         <input
           type="number"
           value={rating}
           onChange={e => setRating(parseFloat(e.target.value))}
-          min="0"
+          min="1"
           max="5"
           step="0.5"
           required
+          disabled={submitting}
         />
       </label>
       <br />
@@ -41,9 +59,13 @@ function ReviewForm({ productId, onReviewAdded }) {
         value={reviewText}
         onChange={e => setReviewText(e.target.value)}
         required
+        disabled={submitting}
       />
       <br />
-      <button type="submit" disabled={!reviewText || rating <= 0}>Submit Review</button>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <button type="submit" disabled={!reviewText || !reviewText || !rating || rating <= 0}>
+        {submitting ? 'Submitting...' : 'Submit Review'}
+        </button>
     </form>
   );
 }
