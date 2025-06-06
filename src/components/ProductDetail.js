@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 
+import axiosInstance from '../api/axiosDefaults'; 
 import ReviewList from '../components/ReviewList';
 import ReviewForm from '../components/ReviewForm';
 
@@ -9,22 +9,43 @@ function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
-  
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-   useEffect(() => {
-    axios.get(`http://127.0.0.1:8000/api/products/${id}/`)
-      .then(response => setProduct(response.data))
-      .catch(error => console.error(error));
-
-    axios.get(`http://127.0.0.1:8000/api/reviews/?product=${id}`)
-      .then(res => setReviews(res.data));
+  useEffect(() => {
+    async function fetchProductAndReviews() {
+      setLoading(true);
+      setError(null);
+      try {
+        const [productRes, reviewsRes] = await Promise.all([
+          axiosInstance.get(`/products/${id}/`),
+          axiosInstance.get(`/reviews/?product=${id}`)
+        ]);
+        setProduct(productRes.data);
+        setReviews(reviewsRes.data);
+      } catch (err) {
+        setError('Error fetching data');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProductAndReviews();
   }, [id]);
-
+   
    const handleAddReview = (newReview) => {
     setReviews([...reviews, newReview]);
   };
 
-  if (!product) return <div>Loading...</div>;
+  if (loading) {
+    return <div>Loading Product Details...</div>;
+  }
+  if (error) {
+    return <div>{error}</div>;
+  }
+  if (!product) {
+    return <div>Product not found.</div>;
+  }
 
   return (
     <div>
@@ -40,21 +61,8 @@ function ProductDetail() {
       </div>
       
       <h3>Reviews</h3>
-      <ReviewList productId={product.id} />
-
-      <h4>Leave a Review</h4>
-      {reviews.length > 0 ? (
-        reviews.map(review => (
-          <div key={review.id}>
-            <p><strong>Rating:</strong> {review.rating}</p>
-            <p>{review.text}</p>
-            <hr />
-          </div>
-        ))
-      ) : (
-        <p>No reviews yet.</p>
-      )}
-
+      <ReviewList reviews={reviews} productId={product.id} />
+      
       <h4>Leave a Review</h4>
       <ReviewForm productId={id} onReviewAdded={handleAddReview} />
     </div>
