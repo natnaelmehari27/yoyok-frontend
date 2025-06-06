@@ -1,9 +1,87 @@
 .homeContainer {
-  padding: 2rem;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1.5rem;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.spinner {
+  font-weight: bold;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.error {
+  color: red;
+  font-weight: bold;
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.searchForm {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.searchInput {
+  width: 300px;
+  padding: 0.5rem 1rem;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.searchButton {
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  border: 1px solid #ccc;
+  border-left: none;
+  border-radius: 0 4px 4px 0;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.searchButton:hover {
+  background-color: #0056b3;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  margin: 1.5rem 0;
+  gap: 0.5rem;
+}
+
+.pageButton {
+  border: 1px solid #007bff;
+  background: white;
+  color: #007bff;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  min-width: 36px;
+}
+
+.pageButton:hover:not(:disabled) {
+  background-color: #007bff;
+  color: white;
+}
+
+.pageButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.activePage {
+  background-color: #007bff;
+  color: white;
+  cursor: default;
 }
