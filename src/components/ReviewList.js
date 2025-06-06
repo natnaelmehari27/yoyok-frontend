@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import React from 'react';
 
 function ReviewList({ reviews }) {
   if (!reviews.length) return <p>No reviews yet.</p>;

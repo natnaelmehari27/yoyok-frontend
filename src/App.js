@@ -2,19 +2,20 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Home from "./pages/Home";
-import ProductPage from "./pages/ProductPage";
+import ProductPage from "./pages/HomePage.js";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import styles from "./styles/App.module.css";
 
 import NavBar from "./components/NavBar";
 import ProductDetail from "./components/ProductDetail";
-
+import ProductList from "./components/ProductsList.js";
 
 function App() {
   return (
     <div className={styles.App}>
       <Router>
+        
         <NavBar />
         <div className={styles.main}>
           <Switch>
@@ -27,6 +28,7 @@ function App() {
           </Switch>
         </div>
       </Router>
+      <ProductList />   
     </div>
   );
 }
