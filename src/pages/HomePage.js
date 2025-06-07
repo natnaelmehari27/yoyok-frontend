@@ -71,7 +71,7 @@ function HomePage() {
   const [products, setProducts] = useState([]);
 
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalPages] = useState(1);
 
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -80,7 +80,7 @@ function HomePage() {
 
   useEffect(() => {
     let isMounted = true;
-    const source = axios.CancelToken.source();
+    const controller = new AbortController();
 
     async function fetchProducts() {
       setLoading(true);
@@ -91,14 +91,14 @@ function HomePage() {
         if (searchTerm.trim()) {
           params.search = searchTerm;
         }
-        const res = await axios.get('/products', { params, cancelToken: source.token });
+        const res = await axios.get('/products', { params, signal: controller.signal });
         if (isMounted) {
           setProducts(res.data.results || res.data);
           setError(null);
         }
       } catch (err) {
         if (isMounted) {
-          if (axios.isCancel(err)) {
+          if (err.name === 'CanceledError' || err.name === 'AbortError') {
             // Request cancelled, do nothing
           } else {
             setError('Failed to load products. Please try again later.');
@@ -116,7 +116,7 @@ function HomePage() {
 
     return () => {
       isMounted = false;
-      source.cancel();
+      controller.abort();
     };
   }, [page, searchTerm]);
 

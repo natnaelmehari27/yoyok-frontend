@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import axiosInstance from '../api/axiosDefaults'; 
 import ReviewList from '../components/ReviewList';
 import ReviewForm from '../components/ReviewForm';
+import '../styles/ProductDetail.module.css'; 
 
 function ProductDetail() {
   const { id } = useParams();

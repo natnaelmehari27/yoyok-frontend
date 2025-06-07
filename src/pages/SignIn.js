@@ -9,7 +9,7 @@ import Row from "react-bootstrap/Row";
 import Image from "react-bootstrap/Image";
 import Container from "react-bootstrap/Container";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import styles from "../styles/SignIn.module.css";
 import btnStyles from "../styles/Button.module.css";
@@ -26,7 +26,7 @@ function SignIn() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -34,7 +34,7 @@ function SignIn() {
     setErrors({});
     try {
       await axios.post("/dj-rest-auth/login/", signInData);
-      navigate("/");
+      history.push("/");
     } catch (err) {
       if (err.response?.data) {
         setErrors(err.response.data);

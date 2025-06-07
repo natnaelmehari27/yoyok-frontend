@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axiosInstance from "../api/axiosDefaults";
+import "../styles/ProductForm.module.css"; // Assuming you have some styles for the form
 
 function ProductForm({ onSuccess }) {
   const [formData, setFormData] = useState({

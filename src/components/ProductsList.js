@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axiosInstance from "../api/axiosDefaults";
+import '../styles/ProductList.module.css'; // Assuming you have some styles for the product list
 
 
 function ProductList() {
@@ -14,7 +15,7 @@ function ProductList() {
       setError(null);
       try {
         const response = await axiosInstance.get('/products/');
-        setProducts(response.data);
+        setProducts(Array.isArray(response.data) ? response.data : response.data.results || []);
       } catch (err) {
         setError('Failed to load products.');
         console.error(err);

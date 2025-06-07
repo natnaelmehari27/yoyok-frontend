@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import styles from "../styles/SignIn.module.css";
 import btnStyles from "../styles/Button.module.css";
@@ -29,7 +29,7 @@ const SignUp = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const navigate = useNavigate();
+  const history = useHistory();
 
   const handleChange = (event) => {
     setSignUpData({
@@ -44,7 +44,7 @@ const SignUp = () => {
     setErrors({});
     try {
       await axios.post("/dj-rest-auth/registration/", signUpData);
-      navigate("/signin");
+      history.push("/signin");
     } catch (err) {
       if (err.response?.data) {
         setErrors(err.response.data);

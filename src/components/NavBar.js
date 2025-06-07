@@ -15,7 +15,8 @@ function NavBar() {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto text-left">
-            <NavLink
+            <Nav.Link
+              as={NavLink}
               to="/"
               end
               className={({ isActive }) =>
@@ -23,24 +24,26 @@ function NavBar() {
               }
             >
               <i className="fas fa-home" aria-hidden="true"></i>Home
-            </NavLink>
+            </Nav.Link>
 
-            <NavLink
+            <Nav.Link
+              as={NavLink}
               to="/signin"
               className={({ isActive }) =>
                 `${styles.NavLink} ${isActive ? styles.Active : ""}`
               } 
             >
               <i className="fas fa-sign-in-alt" aria-hidden="true"></i>sign in
-            </NavLink>
-            <NavLink
+            </Nav.Link>
+            <Nav.Link
+              as={NavLink}
               to="/signup"
               className={({ isActive }) =>
                 `${styles.NavLink} ${isActive ? styles.Active : ""}`
               }
             >
               <i className="fas fa-user-plus"></i>sign up
-            </NavLink>
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

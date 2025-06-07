@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axiosInstance from '../api/axiosDefaults';
-
+import '../styles/ReviewForm.module.css'; // Assuming you have some styles for the form
 
 function ReviewForm({ productId, onReviewAdded }) {
   const [reviewText, setReviewText] = useState('');

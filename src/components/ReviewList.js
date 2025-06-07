@@ -1,4 +1,5 @@
 import React from "react";
+import '../styles/ReviewList.module.css'; // Assuming you have some styles for the review list
 
 function ReviewList({ reviews }) {
   if (!reviews || reviews.length === 0) {
